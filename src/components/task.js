@@ -47,19 +47,18 @@ module.exports = React.createClass({
       });
     }
 
-    if (this.state.map.mapData) {
+    if (this.state.map.mapData.length) {
       this.state.map.mapData.forEach(function(xml) {
-        var layer = new L.OSM.DataLayer(xml)
-          .setStyle({
-            color: '#866CB7',
-            opacity: 1,
-            weight: 4
-          })
-          .addTo(taskLayer);
+        var layer = new L.OSM.DataLayer(xml).addTo(taskLayer);
         map.fitBounds(layer.getBounds(), { reset: true });
         this.geolocate(map.getCenter());
       }.bind(this));
+    } else if (this.context.router.getCurrentParams().task == 'tigerdelta') {
+      var layer = omnivore.wkt.parse(this.state.map.value.st_astext).addTo(taskLayer);
+      map.fitBounds(layer.getBounds(), { reset: true });
+      this.geolocate(map.getCenter());
     }
+
   },
 
   componentDidMount: function() {
@@ -119,12 +118,13 @@ module.exports = React.createClass({
       var left = bounds._southWest.lng - 0.0005;
       var top = bounds._northEast.lat + 0.0005;
       var right = bounds._northEast.lng + 0.0005;
-      var select = [];
 
-      // Build out selection list for JOSM
-      for (var key in state.value) {
-        if (key === 'way_id') select.push('way' + state.value[key]);
-        if (key === 'node_id') select.push('node' + state.value[key]);
+      // Select an item in JOSM
+      var select;
+      if (state.value.node_id) {
+        select = 'node' + state.value.node_id;
+      } else if (state.value.node_id) {
+        select = 'way' + state.value.way_id;
       }
 
       // Try JOSM first
@@ -134,7 +134,7 @@ module.exports = React.createClass({
           right: right,
           top: top,
           bottom: bottom,
-          select: select.join(',')
+          select: select
         })
       }, function(err, res) {
         // Fallback to iD
@@ -180,7 +180,7 @@ module.exports = React.createClass({
       /* jshint ignore:start */
       <div>
         <iframe src={this.state.iDSrcAttribute} frameBorder='0' className='ideditor'></iframe>
-        <button onClick={this.iDEditDone} className='ideditor-done z10000 fill-orange button rcon next round animate pad1y pad2x strong'>Next task</button>
+        <button onClick={this.iDEditDone} className='ideditor-done z10000 button rcon next round animate pad1y pad2x strong'>Next task</button>
       </div>
       /* jshint ignore:end */
       );

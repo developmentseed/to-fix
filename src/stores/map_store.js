@@ -72,6 +72,18 @@ module.exports = Reflux.createStore({
             _this.trigger(_this.data);
           });
         break;
+        case 'tigerdelta':
+          _this.trigger(_this.data);
+        break;
+        case 'nycbuildings':
+          _this.fetchBuildingWays(function(err, res) {
+            if (err) {
+              emitError(err);
+              return _this.taskDone(task.id);
+            }
+            _this.trigger(_this.data);
+          });
+        break;
       }
     });
   },
@@ -104,6 +116,32 @@ module.exports = Reflux.createStore({
       });
 
     });
+
+  },
+
+  fetchBuildingWays: function(cb) {
+    var _this = this;
+    var ways = _this.data.value.elems.split('_');
+
+    xhr({
+      uri: config.osmApi + ways[0].split('way').join('way/') + '/full',
+      responseType: 'document'
+    }, function (err, res) {
+        if (err || res.statusCode != 200) return cb(err || {status: res.statusCode});
+        _this.data.mapData.push(res.body);
+
+        xhr({
+          uri: config.osmApi + ways[1].split('way').join('way/') + '/full',
+          responseType: 'document'
+        }, function (err, res) {
+            if (err || res.statusCode != 200) return cb(err || {status: res.statusCode});
+            _this.data.mapData.push(res.body);
+            cb(null);
+          }
+        );
+
+      }
+    );
 
   },
 

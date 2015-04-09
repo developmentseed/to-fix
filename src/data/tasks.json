@@ -47,5 +47,17 @@
     "id": "mispelledtags",
     "title": "Misspelled tags",
     "source": "keepright"
+  }, {
+    "id": "tigerdelta",
+    "title": "Tiger delta",
+    "source": "tigerdelta"
+  }, {
+    "id": "nycbuildingoverlaps",
+    "title": "NYC overlapping buildings",
+    "source": "nycbuildings"
+  },, {
+    "id": "usabuildingoverlaps",
+    "title": "USA overlapping buildings",
+    "source": "nycbuildings"
   }]
 }
