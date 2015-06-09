@@ -82,7 +82,7 @@ module.exports = React.createClass({
     // Map controls
     map.zoomControl.setPosition('topright');
 
-    var initialLayer = (this.state.map.baseLayer) ?
+    var initialLayer = (this.state.map.baseLayer && layers[this.state.map.baseLayer]) ?
       this.state.map.baseLayer : 'Mapbox Streets';
 
     layers[initialLayer].addTo(map);
