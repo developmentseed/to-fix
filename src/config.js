@@ -19,4 +19,4 @@ module.exports.userProfileURL = 'https://www.openstreetmap.org/user/';
 // module.exports.iD = 'http://openstreetmap.us/iD/release/#';
 module.exports.taskServer = 'http://128.199.204.160:8000/';
 module.exports.osmApi = 'https://fast-dawn-4805.herokuapp.com/xml/';
-module.exports.iD = 'http://opengovt.github.io/openroads-iD';
+module.exports.iD = 'http://opengovt.github.io/openroads-iD/#';
